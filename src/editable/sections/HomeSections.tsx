@@ -37,39 +37,6 @@ function heroPool(posts: SitePost[], timeSections: HomeTimeSection[]) {
   return dedupePosts([...posts, ...timeSections.flatMap((section) => section.posts)])
 }
 
-function MiniThumb({ post, href, index }: { post: SitePost; href: string; index: number }) {
-  return (
-    <Link href={href} className="group flex items-center gap-3">
-      <div className="h-16 w-16 overflow-hidden rounded-[0.8rem] border border-[var(--editable-border)] bg-[var(--slot4-media-bg)]">
-        <img src={getEditablePostImage(post)} alt={post.title} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
-      </div>
-      <div className="min-w-0">
-        <p className="editable-mono text-[10px] text-[var(--slot4-soft-muted-text)]">{String(index + 1).padStart(2, '0')}</p>
-        <p className="line-clamp-2 text-sm font-medium text-[var(--slot4-page-text)]">{post.title}</p>
-      </div>
-    </Link>
-  )
-}
-
-function AvatarRail({ posts, primaryTask, primaryRoute }: { posts: SitePost[]; primaryTask: TaskKey; primaryRoute: string }) {
-  return (
-    <div className="flex flex-wrap items-end justify-center gap-3 lg:justify-end">
-      {posts.slice(0, 6).map((post, index) => (
-        <Link
-          key={post.id || post.slug || index}
-          href={postHref(primaryTask, post, primaryRoute)}
-          className={`group flex flex-col items-center ${index % 2 === 0 ? 'translate-y-0' : 'translate-y-4'}`}
-        >
-          <div className="h-24 w-24 overflow-hidden rounded-full border border-[var(--editable-border)] bg-[var(--slot4-media-bg)] sm:h-28 sm:w-28">
-            <img src={getEditablePostImage(post)} alt={post.title} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
-          </div>
-          <span className="mt-2 max-w-[88px] text-center text-[11px] text-[var(--slot4-muted-text)]">{post.title}</span>
-        </Link>
-      ))}
-    </div>
-  )
-}
-
 function FeaturedCard({ post, href }: { post: SitePost; href: string }) {
   return (
     <Link href={href} className="group grid gap-5 rounded-[2rem] border border-[var(--editable-border)] bg-[var(--slot4-panel-bg)] p-4 lg:grid-cols-[1.05fr_0.95fr]">
@@ -143,126 +110,31 @@ function EditorialRow({ post, href, index }: { post: SitePost; href: string; ind
   )
 }
 
-export function EditableHomeHero({ primaryTask, primaryRoute, posts, timeSections }: HomeSectionProps) {
-  const pool = heroPool(posts, timeSections)
-  const feature = pool[0]
-  const sideThumbs = pool.slice(1, 4)
-  const people = pool.slice(0, 6)
-
+export function EditableHomeHero(_props: HomeSectionProps) {
   return (
     <section className="px-3 pb-6 pt-2 sm:px-5">
-      <div className={`editable-paper relative overflow-hidden rounded-[2rem] px-5 py-6 sm:px-8 sm:py-8 ${container}`}>
-        <div className={`grid gap-8 ${feature ? 'lg:grid-cols-[1.02fr_0.98fr]' : 'lg:grid-cols-1'}`}>
-          <div className="flex flex-col gap-6">
-            <div className="rounded-[1.8rem] border border-[var(--editable-border)] bg-[var(--slot4-surface-bg)] p-6 sm:p-7">
-              <p className="editable-mono text-[10px] text-[var(--slot4-soft-muted-text)]">Homepage head</p>
-              <div className="mt-4 flex flex-col gap-6 border-b border-[var(--editable-border)] pb-6 lg:flex-row lg:items-end lg:justify-between">
-                <div className="max-w-2xl">
-                  <h1 className="editable-display text-[2.9rem] font-semibold leading-[0.92] text-[var(--slot4-page-text)] sm:text-[3.8rem] lg:text-[4.5rem]">
-                    {brandWord()} for profiles, visuals, and clear business-facing discovery.
-                  </h1>
-                  <p className="mt-4 max-w-xl text-sm leading-7 text-[var(--slot4-muted-text)]">
-                    Search practical posts, browse image-led highlights, and open the most relevant profile pages through a cleaner editorial-style landing section.
-                  </p>
-                </div>
-                <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[240px] lg:grid-cols-1">
-                  <div className="rounded-[1.2rem] border border-[var(--editable-border)] bg-[var(--slot4-panel-bg)] px-4 py-3">
-                    <p className="editable-mono text-[10px] text-[var(--slot4-soft-muted-text)]">Primary focus</p>
-                    <p className="mt-2 text-sm font-semibold text-[var(--slot4-page-text)]">Image + profile discovery</p>
-                  </div>
-                  <div className="rounded-[1.2rem] border border-[var(--editable-border)] bg-[var(--slot4-panel-bg)] px-4 py-3">
-                    <p className="editable-mono text-[10px] text-[var(--slot4-soft-muted-text)]">Best for</p>
-                    <p className="mt-2 text-sm font-semibold text-[var(--slot4-page-text)]">Business owners</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px]">
-                <div>
-                  <p className="editable-mono text-[10px] text-[var(--slot4-soft-muted-text)]">Start here</p>
-                  <p className="mt-3 text-[1.85rem] font-semibold leading-[1.08] text-[var(--slot4-page-text)] sm:text-[2.2rem]">
-                    Explore fresh profiles, image-led highlights, and practical posts with a sharper, easier browsing flow.
-                  </p>
-                  <form action="/search" className="mt-6 flex flex-col gap-3 sm:flex-row">
-                    <label className="flex min-w-0 flex-1 items-center gap-3 rounded-[1.2rem] border border-[var(--editable-border)] bg-[var(--editable-search-bg)] px-4 py-3">
-                      <Search className="h-4 w-4 text-[var(--slot4-soft-muted-text)]" />
-                      <input
-                        name="q"
-                        type="search"
-                        placeholder={pagesContent.home.hero.searchPlaceholder}
-                        className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--slot4-soft-muted-text)]"
-                      />
-                    </label>
-                    <button className="rounded-[1.2rem] bg-[var(--slot4-dark-bg)] px-5 py-3 text-sm font-semibold text-[var(--slot4-dark-text)]">
-                      Search
-                    </button>
-                  </form>
-
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {SITE_CONFIG.tasks.filter((task) => task.enabled && task.key !== 'profile').slice(0, 6).map((task) => (
-                      <Link key={task.key} href={task.route} className="rounded-full border border-[var(--editable-border)] px-4 py-2 text-sm text-[var(--slot4-page-text)] hover:border-[var(--slot4-accent)] hover:text-[var(--slot4-accent)]">
-                        {task.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="rounded-[1.4rem] border border-[var(--editable-border)] bg-[var(--slot4-panel-bg)] p-4">
-                  <p className="editable-mono text-[10px] text-[var(--slot4-soft-muted-text)]">Quick browse</p>
-                  <div className="mt-4 grid gap-4">
-                    {sideThumbs.map((post, index) => (
-                      <MiniThumb key={post.id || post.slug || index} post={post} href={postHref(primaryTask, post, primaryRoute)} index={index} />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {feature ? (
-            <div className="grid gap-6">
-              <div className="flex items-center justify-between">
-                <div className="editable-mono text-[10px] text-[var(--slot4-soft-muted-text)]">Spotlight</div>
-                {!isProfileHref(primaryRoute) ? (
-                  <Link href={primaryRoute} className="text-sm font-semibold text-[var(--slot4-page-text)] hover:text-[var(--slot4-accent)]">
-                    View all
-                  </Link>
-                ) : null}
-              </div>
-
-              <Link href={postHref(primaryTask, feature, primaryRoute)} className="group overflow-hidden rounded-[1.8rem] border border-[var(--editable-border)] bg-[var(--slot4-warm)]">
-                <div className="aspect-[16/10] overflow-hidden bg-[var(--slot4-media-bg)]">
-                  <img src={getEditablePostImage(feature)} alt={feature.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
-                </div>
-                <div className="p-5 sm:p-6">
-                  <p className="editable-mono text-[10px] text-[var(--slot4-soft-muted-text)]">Featured story</p>
-                  <h2 className="editable-display mt-3 max-w-xl text-[1.9rem] font-semibold leading-[1] sm:text-[2.35rem]">{feature.title}</h2>
-                  <p className="mt-4 text-sm leading-7 text-[var(--slot4-muted-text)]">{getEditableExcerpt(feature, 150)}</p>
-                  {!isProfileHref(postHref(primaryTask, feature, primaryRoute)) ? (
-                    <span className="mt-6 inline-flex items-center gap-2 rounded-[1.1rem] bg-[var(--slot4-dark-bg)] px-4 py-3 text-sm font-semibold text-[var(--slot4-dark-text)]">
-                      Read feature <ArrowRight className="h-4 w-4" />
-                    </span>
-                  ) : null}
-                </div>
-              </Link>
-
-              <div className="rounded-[1.6rem] border border-[var(--editable-border)] bg-[var(--slot4-surface-bg)] p-5">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="editable-mono text-[10px] text-[var(--slot4-soft-muted-text)]">Profiles and visuals</p>
-                    <p className="mt-2 text-lg font-semibold text-[var(--slot4-page-text)]">Recent entries</p>
-                  </div>
-                  <span className="rounded-full border border-[var(--editable-border)] px-3 py-1 text-xs text-[var(--slot4-muted-text)]">
-                    {people.length} items
-                  </span>
-                </div>
-                <div className="mt-5">
-                  <AvatarRail posts={people} primaryTask={primaryTask} primaryRoute={primaryRoute} />
-                </div>
-              </div>
-            </div>
-          ) : null}
-        </div>
+      <div className={`${container} editable-paper rounded-[2rem] px-6 py-10 sm:px-10 sm:py-14 lg:px-14 lg:py-16`}>
+        <p className="editable-mono text-[10px] text-[var(--slot4-soft-muted-text)]">{brandWord()}</p>
+        <h1 className="editable-display mt-5 max-w-4xl text-[3rem] font-semibold leading-[0.92] text-[var(--slot4-page-text)] sm:text-[4.4rem] lg:text-[5.4rem]">
+          Find businesses and useful stories.
+        </h1>
+        <p className="mt-5 max-w-xl text-base leading-7 text-[var(--slot4-muted-text)]">
+          Search the directory by name, category, or topic.
+        </p>
+        <form action="/search" className="mt-8 flex max-w-3xl flex-col gap-3 sm:flex-row">
+          <label className="flex min-w-0 flex-1 items-center gap-3 rounded-[1.2rem] border border-[var(--editable-border)] bg-[var(--editable-search-bg)] px-4 py-3">
+            <Search className="h-4 w-4 text-[var(--slot4-soft-muted-text)]" />
+            <input
+              name="q"
+              type="search"
+              placeholder={pagesContent.home.hero.searchPlaceholder}
+              className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--slot4-soft-muted-text)]"
+            />
+          </label>
+          <button className="rounded-[1.2rem] bg-[var(--slot4-dark-bg)] px-6 py-3 text-sm font-semibold text-[var(--slot4-dark-text)]">
+            Search
+          </button>
+        </form>
       </div>
     </section>
   )
