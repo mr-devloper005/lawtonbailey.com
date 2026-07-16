@@ -12,17 +12,34 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function LoginPage() {
   return (
     <EditableSiteShell>
-      <main className="bg-[var(--slot4-panel-bg)] text-[var(--slot4-page-text)]">
-        <section className="mx-auto grid min-h-[calc(100vh-12rem)] max-w-[var(--editable-container)] items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--slot4-accent)]">{pagesContent.auth.login.badge}</p>
-            <h1 className="mt-4 max-w-xl text-4xl font-extrabold leading-[1.05] tracking-[-0.02em] sm:text-5xl">{pagesContent.auth.login.title}</h1>
-            <p className="mt-5 max-w-lg text-base leading-7 text-[var(--slot4-muted-text)]">{pagesContent.auth.login.description}</p>
-          </div>
-          <div className="rounded-2xl border border-[var(--editable-border)] bg-[var(--slot4-surface-bg)] p-7 shadow-[0_4px_24px_rgba(0,0,0,0.08)] sm:p-9">
-            <h2 className="text-2xl font-bold tracking-[-0.01em]">{pagesContent.auth.login.formTitle}</h2>
-            <EditableLocalLoginForm />
-            <p className="mt-6 text-sm text-[var(--slot4-muted-text)]">New here? <Link href="/signup" className="font-semibold text-[var(--slot4-accent)] underline-offset-4 hover:underline">{pagesContent.auth.login.createCta}</Link></p>
+      <main className="text-[var(--slot4-page-text)]">
+        <section className="mx-auto max-w-[var(--editable-container)] px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
+          <div className="editable-paper grid overflow-hidden rounded-[2rem] lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="flex min-h-[430px] flex-col justify-between p-7 sm:p-10 lg:min-h-[590px] lg:p-12">
+              <div>
+                <p className="editable-mono text-[10px] text-[var(--slot4-soft-muted-text)]">{pagesContent.auth.login.badge}</p>
+                <h1 className="editable-display mt-6 max-w-lg text-5xl font-semibold leading-[0.92] sm:text-6xl">{pagesContent.auth.login.title}</h1>
+                <p className="mt-6 max-w-md text-base leading-8 text-[var(--slot4-muted-text)]">{pagesContent.auth.login.description}</p>
+              </div>
+              <div className="mt-12 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-[1.4rem] border border-[var(--editable-border)] bg-[var(--slot4-panel-bg)] p-5">
+                  <p className="editable-mono text-[9px] text-[var(--slot4-soft-muted-text)]">Member space</p>
+                  <p className="mt-3 text-sm font-semibold leading-6">Access your publishing workspace.</p>
+                </div>
+                <div className="rounded-[1.4rem] border border-[var(--editable-border)] p-5">
+                  <p className="editable-mono text-[9px] text-[var(--slot4-soft-muted-text)]">Secure return</p>
+                  <p className="mt-3 text-sm font-semibold leading-6">Continue with your saved account.</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center bg-[var(--slot4-dark-bg)] p-5 text-[var(--slot4-dark-text)] sm:p-8 lg:p-12">
+              <div className="w-full rounded-[1.8rem] border border-white/15 bg-white/[0.06] p-6 sm:p-8">
+                <p className="editable-mono text-[9px] text-white/50">Welcome back</p>
+                <h2 className="editable-display mt-3 text-3xl font-semibold">{pagesContent.auth.login.formTitle}</h2>
+                <EditableLocalLoginForm />
+                <p className="mt-6 border-t border-white/15 pt-5 text-sm text-white/65">New here? <Link href="/signup" className="font-semibold text-white underline decoration-white/40 underline-offset-4 hover:decoration-white">{pagesContent.auth.login.createCta}</Link></p>
+              </div>
+            </div>
           </div>
         </section>
       </main>
